@@ -272,9 +272,10 @@ Get your OpenRouter API key:
 ### Local Development
 ```bash
 npm start
+# Server runs on http://localhost:3000
 ```
 
-### Production Build
+### Production Build (Local)
 ```bash
 # Set environment to production
 export NODE_ENV=production
@@ -285,6 +286,58 @@ export OPENROUTER_API_KEY=your_key_here
 # Start the server
 npm start
 ```
+
+### 🚀 Vercel Deployment (Recommended)
+
+The application is pre-configured for Vercel serverless deployment.
+
+**Prerequisites:**
+- Vercel account (free at https://vercel.com)
+- GitHub repository connected to Vercel
+
+**Deployment Steps:**
+
+1. **Push to GitHub**
+   ```bash
+   git push origin main
+   ```
+
+2. **Deploy on Vercel**
+   - Go to https://vercel.com/dashboard
+   - Click "Add New" → "Project"
+   - Import your GitHub repository
+   - Configure environment variables:
+     ```
+     OPENROUTER_API_KEY = your_api_key_here
+     NODE_ENV = production
+     ```
+   - Click "Deploy"
+
+3. **Verify Deployment**
+   ```bash
+   # Your app will be available at:
+   https://your-project.vercel.app
+   
+   # Test the health endpoint:
+   curl https://your-project.vercel.app/health
+   ```
+
+**Files Added for Vercel:**
+- `vercel.json` - Serverless configuration
+- `api/index.js` - Serverless handler
+- Updated `src/server.js` - Production-ready server
+
+**Key Features:**
+- ✅ Automatic scaling
+- ✅ Global CDN
+- ✅ Zero-downtime deployments
+- ✅ Environment variable management
+- ✅ Free tier available
+
+**Configuration Details:**
+- API timeout: 60 seconds
+- Memory: 1024 MB
+- Node.js version: 18+ (auto-selected)
 
 ### Docker (Coming Soon)
 ```dockerfile

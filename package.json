@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "node src/server.js",
-    "test:api": "node test-openrouter.js"
+    "test:api": "node test-openrouter.js",
+    "vercel-build": "echo 'Build completed'"
   },
   "keywords": [
     "fridge",

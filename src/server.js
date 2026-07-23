@@ -39,9 +39,10 @@ app.use((req, res) => {
 // Error handler
 app.use(errorHandler);
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`
+// Start server (local development only, not for Vercel)
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`
 ╔════════════════════════════════════════════════════════════╗
 ║      🧊 냉장고 AI 레시피 추천 시스템 - PRD_01 실행 중     ║
 ╚════════════════════════════════════════════════════════════╝
@@ -49,24 +50,26 @@ app.listen(PORT, () => {
 📍 서버가 http://localhost:${PORT} 에서 실행 중입니다.
 
 📝 사용 가능한 엔드포인트:
-  POST /api/v1/fridge/analyze    - 냉장고 사진 인식
-  GET  /health                   - 서버 상태 확인
+  POST /api/v1/fridge/analyze-base64 - 냉장고 사진 인식
+  GET  /health                       - 서버 상태 확인
 
 🔧 기술 스택:
-  - OpenRouter API: openai/gpt-4-turbo (Vision)
+  - OpenRouter API: Vision Model
   - 파일 업로드: Multer
   - 이미지 처리: Sharp
 
 ⚠️  ${process.env.OPENROUTER_API_KEY ? '✅' : '❌'} OpenRouter API Key: ${
-    process.env.OPENROUTER_API_KEY ? '설정됨' : '설정 필요'
-  }
+      process.env.OPENROUTER_API_KEY ? '설정됨' : '설정 필요'
+    }
 
 📚 문서: /docs/PRD_01.md
 
 💡 테스트 커맨드:
-  curl -X POST http://localhost:${PORT}/api/v1/fridge/analyze \\
-    -F "image=@/path/to/fridge/image.jpg"
-  `);
-});
+  curl -X POST http://localhost:${PORT}/api/v1/fridge/analyze-base64 \\
+    -H "Content-Type: application/json" \\
+    -d '{"imageBase64": "...", "mimeType": "image/png"}'
+    `);
+  });
+}
 
 module.exports = app;
