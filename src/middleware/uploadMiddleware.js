@@ -2,10 +2,14 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// 업로드 디렉토리 생성
+// 업로드 디렉토리 생성 (Vercel serverless 환경에서는 스킵)
 const uploadDir = path.join(__dirname, '../../uploads/temp');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+try {
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
+} catch (err) {
+  console.warn('⚠️ 업로드 디렉토리 생성 실패 (Vercel serverless 환경):', err.message);
 }
 
 // 스토리지 설정
