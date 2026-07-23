@@ -1,8 +1,4 @@
 {
-  "env": {
-    "OPENROUTER_API_KEY": "@OPENROUTER_API_KEY",
-    "NODE_ENV": "production"
-  },
   "functions": {
     "api/index.js": {
       "memory": 1024,
