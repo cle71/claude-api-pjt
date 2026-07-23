@@ -40,18 +40,23 @@ app.use((req, res) => {
 app.use(errorHandler);
 
 // Start server (local development only, not for Vercel)
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => {
+const isProduction = process.env.NODE_ENV === 'production';
+const isDevelopment = process.env.NODE_ENV === 'development' || !process.env.NODE_ENV;
+
+if (isDevelopment) {
+  const server = app.listen(PORT, () => {
     console.log(`
 ╔════════════════════════════════════════════════════════════╗
-║      🧊 냉장고 AI 레시피 추천 시스템 - PRD_01 실행 중     ║
+║      🧊 냉장고 AI 레시피 추천 시스템 - 로컬 개발 서버     ║
 ╚════════════════════════════════════════════════════════════╝
 
 📍 서버가 http://localhost:${PORT} 에서 실행 중입니다.
 
 📝 사용 가능한 엔드포인트:
   POST /api/v1/fridge/analyze-base64 - 냉장고 사진 인식
-  GET  /health                       - 서버 상태 확인
+  POST /api/v1/recipes/generate       - 레시피 생성
+  GET  /health                        - 서버 상태 확인
+  GET  /                              - Web UI
 
 🔧 기술 스택:
   - OpenRouter API: Vision Model
@@ -69,6 +74,15 @@ if (process.env.NODE_ENV !== 'production') {
     -H "Content-Type: application/json" \\
     -d '{"imageBase64": "...", "mimeType": "image/png"}'
     `);
+  });
+
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`❌ 포트 ${PORT}가 이미 사용 중입니다.`);
+      console.error(`   다른 프로세스를 종료하고 다시 시도하세요.`);
+      process.exit(1);
+    }
+    throw err;
   });
 }
 
